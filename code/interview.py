@@ -106,7 +106,7 @@ for message in st.session_state.messages[1:]:
 
 # Load API client
 if api == "openai":
-    openai.api_key = st.secrets["API_KEY"]
+    client = OpenAI(api_key=st.secrets["API_KEY"])
     api_kwargs = {"stream": True}
 elif api == "anthropic":
     client = anthropic.Anthropic(api_key=st.secrets["API_KEY"])
