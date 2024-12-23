@@ -50,7 +50,7 @@ if not is_valid:
 st.sidebar.title("Interview Details")
 for param in required_params:
     # Fetch the first value of the list returned for each parameter and sanitize it
-    sanitized_value = html.unescape(query_params[param][0]).replace("<br>", " ")
+    sanitized_value = html.unescape(query_params[param])
     st.sidebar.write(f"{param.capitalize()}: {sanitized_value}")
 
 # Check if usernames and logins are enabled
