@@ -46,6 +46,9 @@ if not is_valid:
     st.error(f"Missing required parameter(s): {', '.join(missing_params)}")
     st.stop()
 
+# Extract respondent's name
+respondent_name = html.unescape(query_params["name"])
+
 # Display parameters in sidebar
 st.sidebar.title("Interview Details")
 for param in required_params:
@@ -150,10 +153,16 @@ if config.TEMPERATURE is not None:
 # generate and display its first message
 if not st.session_state.messages:
 
+    # Replace greeting in the interview outline with a personalized message
+    personalized_prompt = config.INTERVIEW_OUTLINE.replace(
+        "Hello! I'm glad to have the opportunity to speak about your educational journey today.",
+        f"Hello {respondent_name}! I'm glad to have the opportunity to speak about your educational journey today."
+    )
+
     if api == "openai":
 
         st.session_state.messages.append(
-            {"role": "system", "content": config.SYSTEM_PROMPT}
+            {"role": "system", "content": personalized_prompt}
         )
         with st.chat_message("assistant", avatar=config.AVATAR_INTERVIEWER):
             stream = client.chat.completions.create(**api_kwargs)
