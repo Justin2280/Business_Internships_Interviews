@@ -7,6 +7,7 @@ from utils import (
 )
 import os
 import config
+import html  # For sanitizing query parameters
 
 # Load API library
 if "gpt" in config.MODEL.lower():
@@ -48,7 +49,9 @@ if not is_valid:
 # Display parameters in sidebar
 st.sidebar.title("Interview Details")
 for param in required_params:
-    st.sidebar.write(f"{param.capitalize()}: {query_params[param][0]}")
+    # Fetch the first value of the list returned for each parameter and sanitize it
+    sanitized_value = html.unescape(query_params[param][0]).replace("<br>", " ")
+    st.sidebar.write(f"{param.capitalize()}: {sanitized_value}")
 
 # Check if usernames and logins are enabled
 if config.LOGINS:

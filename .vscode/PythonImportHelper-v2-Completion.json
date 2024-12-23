@@ -60,6 +60,15 @@
         "documentation": {}
     },
     {
+        "label": "html",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "html",
+        "description": "html",
+        "detail": "html",
+        "documentation": {}
+    },
+    {
         "label": "hmac",
         "kind": 6,
         "isExtraImport": true,
