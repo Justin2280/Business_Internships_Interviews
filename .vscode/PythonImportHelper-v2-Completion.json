@@ -213,38 +213,29 @@
         "documentation": {}
     },
     {
+        "label": "validate_query_params",
+        "kind": 2,
+        "importPath": "code.interview",
+        "description": "code.interview",
+        "peekOfCode": "def validate_query_params(params, required_keys):\n    missing_keys = [key for key in required_keys if key not in params or not params[key]]\n    if missing_keys:\n        return False, missing_keys\n    return True, []\n# Extract query parameters\nquery_params = st.query_params\n# Define required parameters\nrequired_params = [\"student_number\", \"name\", \"company\"]\n# Validate parameters",
+        "detail": "code.interview",
+        "documentation": {}
+    },
+    {
         "label": "query_params",
         "kind": 5,
         "importPath": "code.interview",
         "description": "code.interview",
-        "peekOfCode": "query_params = st.query_params  # Updated API\nstudent_number = query_params.get('student_number', [None])[0]\nname = query_params.get('name', [None])[0]\ncompany = query_params.get('company', [None])[0]\n# Display respondent information or handle missing data\nif not all([student_number, name, company]):\n    st.error(\"Missing required respondent information. Please ensure all fields are passed.\")\n    st.stop()\nelse:\n    st.sidebar.markdown(f\"### Respondent Info\")",
+        "peekOfCode": "query_params = st.query_params\n# Define required parameters\nrequired_params = [\"student_number\", \"name\", \"company\"]\n# Validate parameters\nis_valid, missing_params = validate_query_params(query_params, required_params)\n# Display error and stop if parameters are missing\nif not is_valid:\n    st.error(f\"Missing required parameter(s): {', '.join(missing_params)}\")\n    st.stop()\n# Display parameters in sidebar",
         "detail": "code.interview",
         "documentation": {}
     },
     {
-        "label": "student_number",
+        "label": "required_params",
         "kind": 5,
         "importPath": "code.interview",
         "description": "code.interview",
-        "peekOfCode": "student_number = query_params.get('student_number', [None])[0]\nname = query_params.get('name', [None])[0]\ncompany = query_params.get('company', [None])[0]\n# Display respondent information or handle missing data\nif not all([student_number, name, company]):\n    st.error(\"Missing required respondent information. Please ensure all fields are passed.\")\n    st.stop()\nelse:\n    st.sidebar.markdown(f\"### Respondent Info\")\n    st.sidebar.markdown(f\"- **Student Number:** {student_number}\")",
-        "detail": "code.interview",
-        "documentation": {}
-    },
-    {
-        "label": "name",
-        "kind": 5,
-        "importPath": "code.interview",
-        "description": "code.interview",
-        "peekOfCode": "name = query_params.get('name', [None])[0]\ncompany = query_params.get('company', [None])[0]\n# Display respondent information or handle missing data\nif not all([student_number, name, company]):\n    st.error(\"Missing required respondent information. Please ensure all fields are passed.\")\n    st.stop()\nelse:\n    st.sidebar.markdown(f\"### Respondent Info\")\n    st.sidebar.markdown(f\"- **Student Number:** {student_number}\")\n    st.sidebar.markdown(f\"- **Name:** {name}\")",
-        "detail": "code.interview",
-        "documentation": {}
-    },
-    {
-        "label": "company",
-        "kind": 5,
-        "importPath": "code.interview",
-        "description": "code.interview",
-        "peekOfCode": "company = query_params.get('company', [None])[0]\n# Display respondent information or handle missing data\nif not all([student_number, name, company]):\n    st.error(\"Missing required respondent information. Please ensure all fields are passed.\")\n    st.stop()\nelse:\n    st.sidebar.markdown(f\"### Respondent Info\")\n    st.sidebar.markdown(f\"- **Student Number:** {student_number}\")\n    st.sidebar.markdown(f\"- **Name:** {name}\")\n    st.sidebar.markdown(f\"- **Company:** {company}\")",
+        "peekOfCode": "required_params = [\"student_number\", \"name\", \"company\"]\n# Validate parameters\nis_valid, missing_params = validate_query_params(query_params, required_params)\n# Display error and stop if parameters are missing\nif not is_valid:\n    st.error(f\"Missing required parameter(s): {', '.join(missing_params)}\")\n    st.stop()\n# Display parameters in sidebar\nst.sidebar.title(\"Interview Details\")\nfor param in required_params:",
         "detail": "code.interview",
         "documentation": {}
     },
@@ -253,25 +244,34 @@
         "kind": 5,
         "importPath": "code.interview",
         "description": "code.interview",
-        "peekOfCode": "interview_previously_completed = check_if_interview_completed(\n    config.TIMES_DIRECTORY, st.session_state.username\n)\n# If app started but interview was previously completed\nif interview_previously_completed and not st.session_state.messages:\n    st.session_state.interview_active = False\n    st.markdown(\"Interview already completed.\")\n# Add 'Quit' button to dashboard\ncol1, col2 = st.columns([0.85, 0.15])\nwith col2:",
+        "peekOfCode": "interview_previously_completed = check_if_interview_completed(\n    config.TIMES_DIRECTORY, st.session_state.username\n)\n# If app started but interview was previously completed\nif interview_previously_completed and not st.session_state.messages:\n    st.session_state.interview_active = False\n    completed_message = \"Interview already completed.\"\n    st.markdown(completed_message)\n# Add 'Quit' button to dashboard\ncol1, col2 = st.columns([0.85, 0.15])",
         "detail": "code.interview",
         "documentation": {}
     },
     {
-        "label": "client",
+        "label": "api_kwargs[\"messages\"]",
         "kind": 5,
         "importPath": "code.interview",
         "description": "code.interview",
-        "peekOfCode": "client = (\n    OpenAI(api_key=st.secrets[\"API_KEY\"])\n    if api == \"openai\"\n    else anthropic.Anthropic(api_key=st.secrets[\"API_KEY\"])\n)\napi_kwargs = {\n    \"messages\": st.session_state.messages,\n    \"model\": config.MODEL,\n    \"max_tokens\": config.MAX_OUTPUT_TOKENS,\n    \"temperature\": config.TEMPERATURE,",
+        "peekOfCode": "api_kwargs[\"messages\"] = st.session_state.messages\napi_kwargs[\"model\"] = config.MODEL\napi_kwargs[\"max_tokens\"] = config.MAX_OUTPUT_TOKENS\nif config.TEMPERATURE is not None:\n    api_kwargs[\"temperature\"] = config.TEMPERATURE\n# In case the interview history is still empty, pass system prompt to model, and\n# generate and display its first message\nif not st.session_state.messages:\n    if api == \"openai\":\n        st.session_state.messages.append(",
         "detail": "code.interview",
         "documentation": {}
     },
     {
-        "label": "api_kwargs",
+        "label": "api_kwargs[\"model\"]",
         "kind": 5,
         "importPath": "code.interview",
         "description": "code.interview",
-        "peekOfCode": "api_kwargs = {\n    \"messages\": st.session_state.messages,\n    \"model\": config.MODEL,\n    \"max_tokens\": config.MAX_OUTPUT_TOKENS,\n    \"temperature\": config.TEMPERATURE,\n}\n# If no messages, initialize conversation\nif not st.session_state.messages:\n    st.session_state.messages.append(\n        {\"role\": \"system\", \"content\": config.SYSTEM_PROMPT}",
+        "peekOfCode": "api_kwargs[\"model\"] = config.MODEL\napi_kwargs[\"max_tokens\"] = config.MAX_OUTPUT_TOKENS\nif config.TEMPERATURE is not None:\n    api_kwargs[\"temperature\"] = config.TEMPERATURE\n# In case the interview history is still empty, pass system prompt to model, and\n# generate and display its first message\nif not st.session_state.messages:\n    if api == \"openai\":\n        st.session_state.messages.append(\n            {\"role\": \"system\", \"content\": config.SYSTEM_PROMPT}",
+        "detail": "code.interview",
+        "documentation": {}
+    },
+    {
+        "label": "api_kwargs[\"max_tokens\"]",
+        "kind": 5,
+        "importPath": "code.interview",
+        "description": "code.interview",
+        "peekOfCode": "api_kwargs[\"max_tokens\"] = config.MAX_OUTPUT_TOKENS\nif config.TEMPERATURE is not None:\n    api_kwargs[\"temperature\"] = config.TEMPERATURE\n# In case the interview history is still empty, pass system prompt to model, and\n# generate and display its first message\nif not st.session_state.messages:\n    if api == \"openai\":\n        st.session_state.messages.append(\n            {\"role\": \"system\", \"content\": config.SYSTEM_PROMPT}\n        )",
         "detail": "code.interview",
         "documentation": {}
     },
