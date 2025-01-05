@@ -40,25 +40,6 @@ def check_password():
     return False, st.session_state.username
 
 
-def check_if_interview_completed(directory, username):
-    """Check if interview transcript/time file exists which signals that interview was completed."""
-
-    # Test account has multiple interview attempts
-    if username != "testaccount":
-
-        # Check if file exists
-        try:
-            with open(os.path.join(directory, f"{username}.txt"), "r") as _:
-                return True
-
-        except FileNotFoundError:
-            return False
-
-    else:
-
-        return False
-
-
 def save_interview_data(
     username,
     transcripts_directory,
@@ -68,13 +49,14 @@ def save_interview_data(
 ):
     """Write interview data (transcript and time) to disk."""
 
-    # Store chat transcript
+    # Store chat transcript with session ID
     with open(
         os.path.join(
             transcripts_directory, f"{username}{file_name_addition_transcript}.txt"
         ),
         "w",
     ) as t:
+        t.write(f"Session ID: {st.session_state.session_id}\n\n")  # Add session ID
         for message in st.session_state.messages:
             t.write(f"{message['role']}: {message['content']}\n")
 
@@ -85,5 +67,7 @@ def save_interview_data(
     ) as d:
         duration = (time.time() - st.session_state.start_time) / 60
         d.write(
-            f"Start time (UTC): {time.strftime('%d/%m/%Y %H:%M:%S', time.localtime(st.session_state.start_time))}\nInterview duration (minutes): {duration:.2f}"
+            f"Session ID: {st.session_state.session_id}\n"  # Add session ID
+            f"Start time (UTC): {time.strftime('%d/%m/%Y %H:%M:%S', time.localtime(st.session_state.start_time))}\n"
+            f"Interview duration (minutes): {duration:.2f}"
         )

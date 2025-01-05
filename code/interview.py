@@ -107,6 +107,12 @@ if interview_previously_completed and not st.session_state.messages:
     st.session_state.interview_active = False
     completed_message = "Interview already completed."
     st.markdown(completed_message)
+    
+# URL to Qualtrics evaluation
+evaluation_url = "https://your.qualtrics.url"
+
+# Append session ID as query parameter
+evaluation_url_with_session = f"{evaluation_url}?session_id={st.session_state.session_id}"
 
 # Add 'Quit' button to dashboard
 col1, col2 = st.columns([0.85, 0.15])
@@ -120,6 +126,7 @@ with col2:
 
         # Set interview to inactive, display quit message, and store data
         st.session_state.interview_active = False
+        st.markdown(f"[Click here to evaluate the interview]({evaluation_url_with_session})")
         quit_message = "You have cancelled the interview."
         st.session_state.messages.append({"role": "assistant", "content": quit_message})
         save_interview_data(

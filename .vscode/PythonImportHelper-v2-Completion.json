@@ -271,7 +271,25 @@
         "kind": 5,
         "importPath": "code.interview",
         "description": "code.interview",
-        "peekOfCode": "interview_previously_completed = check_if_interview_completed(\n    config.TIMES_DIRECTORY, st.session_state.username\n)\n# If app started but interview was previously completed\nif interview_previously_completed and not st.session_state.messages:\n    st.session_state.interview_active = False\n    completed_message = \"Interview already completed.\"\n    st.markdown(completed_message)\n# Add 'Quit' button to dashboard\ncol1, col2 = st.columns([0.85, 0.15])",
+        "peekOfCode": "interview_previously_completed = check_if_interview_completed(\n    config.TIMES_DIRECTORY, st.session_state.username\n)\n# If app started but interview was previously completed\nif interview_previously_completed and not st.session_state.messages:\n    st.session_state.interview_active = False\n    completed_message = \"Interview already completed.\"\n    st.markdown(completed_message)\n# URL to Qualtrics evaluation\nevaluation_url = \"https://your.qualtrics.url\"",
+        "detail": "code.interview",
+        "documentation": {}
+    },
+    {
+        "label": "evaluation_url",
+        "kind": 5,
+        "importPath": "code.interview",
+        "description": "code.interview",
+        "peekOfCode": "evaluation_url = \"https://your.qualtrics.url\"\n# Append session ID as query parameter\nevaluation_url_with_session = f\"{evaluation_url}?session_id={st.session_state.session_id}\"\n# Add 'Quit' button to dashboard\ncol1, col2 = st.columns([0.85, 0.15])\n# Place where the second column is\nwith col2:\n    # If interview is active and 'Quit' button is clicked\n    if st.session_state.interview_active and st.button(\n        \"Quit\", help=\"End the interview.\"",
+        "detail": "code.interview",
+        "documentation": {}
+    },
+    {
+        "label": "evaluation_url_with_session",
+        "kind": 5,
+        "importPath": "code.interview",
+        "description": "code.interview",
+        "peekOfCode": "evaluation_url_with_session = f\"{evaluation_url}?session_id={st.session_state.session_id}\"\n# Add 'Quit' button to dashboard\ncol1, col2 = st.columns([0.85, 0.15])\n# Place where the second column is\nwith col2:\n    # If interview is active and 'Quit' button is clicked\n    if st.session_state.interview_active and st.button(\n        \"Quit\", help=\"End the interview.\"\n    ):\n        # Set interview to inactive, display quit message, and store data",
         "detail": "code.interview",
         "documentation": {}
     },
@@ -312,20 +330,11 @@
         "documentation": {}
     },
     {
-        "label": "check_if_interview_completed",
-        "kind": 2,
-        "importPath": "code.utils",
-        "description": "code.utils",
-        "peekOfCode": "def check_if_interview_completed(directory, username):\n    \"\"\"Check if interview transcript/time file exists which signals that interview was completed.\"\"\"\n    # Test account has multiple interview attempts\n    if username != \"testaccount\":\n        # Check if file exists\n        try:\n            with open(os.path.join(directory, f\"{username}.txt\"), \"r\") as _:\n                return True\n        except FileNotFoundError:\n            return False",
-        "detail": "code.utils",
-        "documentation": {}
-    },
-    {
         "label": "save_interview_data",
         "kind": 2,
         "importPath": "code.utils",
         "description": "code.utils",
-        "peekOfCode": "def save_interview_data(\n    username,\n    transcripts_directory,\n    times_directory,\n    file_name_addition_transcript=\"\",\n    file_name_addition_time=\"\",\n):\n    \"\"\"Write interview data (transcript and time) to disk.\"\"\"\n    # Store chat transcript\n    with open(",
+        "peekOfCode": "def save_interview_data(\n    username,\n    transcripts_directory,\n    times_directory,\n    file_name_addition_transcript=\"\",\n    file_name_addition_time=\"\",\n):\n    \"\"\"Write interview data (transcript and time) to disk.\"\"\"\n    # Store chat transcript with session ID\n    with open(",
         "detail": "code.utils",
         "documentation": {}
     }
