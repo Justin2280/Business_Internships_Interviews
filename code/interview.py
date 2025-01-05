@@ -8,6 +8,7 @@ from utils import (
 import os
 import config
 import html  # For sanitizing query parameters
+import uuid
 
 # Load API library
 if "gpt" in config.MODEL.lower():
@@ -49,12 +50,17 @@ if not is_valid:
 # Extract respondent's name
 respondent_name = html.unescape(query_params["name"])
 
+# Check if session ID exists in session state, if not, create one
+if "session_id" not in st.session_state:
+    st.session_state.session_id = str(uuid.uuid4())
+
 # Display parameters in sidebar
 st.sidebar.title("Interview Details")
 for param in required_params:
     # Fetch the first value of the list returned for each parameter and sanitize it
     sanitized_value = html.unescape(query_params[param])
     st.sidebar.write(f"{param.capitalize()}: {sanitized_value}")
+st.sidebar.write(f"Session ID: {st.session_state.session_id}")
 
 # Check if usernames and logins are enabled
 if config.LOGINS:

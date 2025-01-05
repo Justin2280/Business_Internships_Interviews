@@ -69,6 +69,15 @@
         "documentation": {}
     },
     {
+        "label": "uuid",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "uuid",
+        "description": "uuid",
+        "detail": "uuid",
+        "documentation": {}
+    },
+    {
         "label": "hmac",
         "kind": 6,
         "isExtraImport": true,
@@ -244,7 +253,7 @@
         "kind": 5,
         "importPath": "code.interview",
         "description": "code.interview",
-        "peekOfCode": "required_params = [\"student_number\", \"name\", \"company\"]\n# Validate parameters\nis_valid, missing_params = validate_query_params(query_params, required_params)\n# Display error and stop if parameters are missing\nif not is_valid:\n    st.error(f\"Missing required parameter(s): {', '.join(missing_params)}\")\n    st.stop()\n# Extract respondent's name\nrespondent_name = html.unescape(query_params[\"name\"])\n# Display parameters in sidebar",
+        "peekOfCode": "required_params = [\"student_number\", \"name\", \"company\"]\n# Validate parameters\nis_valid, missing_params = validate_query_params(query_params, required_params)\n# Display error and stop if parameters are missing\nif not is_valid:\n    st.error(f\"Missing required parameter(s): {', '.join(missing_params)}\")\n    st.stop()\n# Extract respondent's name\nrespondent_name = html.unescape(query_params[\"name\"])\n# Check if session ID exists in session state, if not, create one",
         "detail": "code.interview",
         "documentation": {}
     },
@@ -253,7 +262,7 @@
         "kind": 5,
         "importPath": "code.interview",
         "description": "code.interview",
-        "peekOfCode": "respondent_name = html.unescape(query_params[\"name\"])\n# Display parameters in sidebar\nst.sidebar.title(\"Interview Details\")\nfor param in required_params:\n    # Fetch the first value of the list returned for each parameter and sanitize it\n    sanitized_value = html.unescape(query_params[param])\n    st.sidebar.write(f\"{param.capitalize()}: {sanitized_value}\")\n# Check if usernames and logins are enabled\nif config.LOGINS:\n    # Check password (displays login screen)",
+        "peekOfCode": "respondent_name = html.unescape(query_params[\"name\"])\n# Check if session ID exists in session state, if not, create one\nif \"session_id\" not in st.session_state:\n    st.session_state.session_id = str(uuid.uuid4())\n# Display parameters in sidebar\nst.sidebar.title(\"Interview Details\")\nfor param in required_params:\n    # Fetch the first value of the list returned for each parameter and sanitize it\n    sanitized_value = html.unescape(query_params[param])\n    st.sidebar.write(f\"{param.capitalize()}: {sanitized_value}\")",
         "detail": "code.interview",
         "documentation": {}
     },
