@@ -126,7 +126,6 @@ with col2:
 
         # Set interview to inactive, display quit message, and store data
         st.session_state.interview_active = False
-        st.markdown(f"[Click here to evaluate the interview]({evaluation_url_with_session})")
         quit_message = "You have cancelled the interview."
         st.session_state.messages.append({"role": "assistant", "content": quit_message})
         save_interview_data(
@@ -134,6 +133,22 @@ with col2:
             config.TRANSCRIPTS_DIRECTORY,
             config.TIMES_DIRECTORY,
         )
+        
+# After the interview ends
+if not st.session_state.interview_active:
+    # Clear the screen
+    st.empty()
+    
+    # Center the button on the page
+    st.markdown(
+        f"""
+        <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+            <a href="{evaluation_url_with_session}" target="_blank" style="text-decoration: none; background-color: #4CAF50; color: white; padding: 15px 32px; text-align: center; font-size: 16px; border-radius: 8px;">Click here to evaluate the interview</a>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )        
+
 
 # Upon rerun, display the previous conversation (except system prompt or first message)
 for message in st.session_state.messages[1:]:
