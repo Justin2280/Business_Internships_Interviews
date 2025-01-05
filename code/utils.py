@@ -40,6 +40,25 @@ def check_password():
     return False, st.session_state.username
 
 
+def check_if_interview_completed(directory, username):
+    """Check if interview transcript/time file exists which signals that interview was completed."""
+
+    # Test account has multiple interview attempts
+    if username != "testaccount":
+
+        # Check if file exists
+        try:
+            with open(os.path.join(directory, f"{username}.txt"), "r") as _:
+                return True
+
+        except FileNotFoundError:
+            return False
+
+    else:
+
+        return False
+
+
 def save_interview_data(
     username,
     transcripts_directory,

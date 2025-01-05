@@ -330,6 +330,15 @@
         "documentation": {}
     },
     {
+        "label": "check_if_interview_completed",
+        "kind": 2,
+        "importPath": "code.utils",
+        "description": "code.utils",
+        "peekOfCode": "def check_if_interview_completed(directory, username):\n    \"\"\"Check if interview transcript/time file exists which signals that interview was completed.\"\"\"\n    # Test account has multiple interview attempts\n    if username != \"testaccount\":\n        # Check if file exists\n        try:\n            with open(os.path.join(directory, f\"{username}.txt\"), \"r\") as _:\n                return True\n        except FileNotFoundError:\n            return False",
+        "detail": "code.utils",
+        "documentation": {}
+    },
+    {
         "label": "save_interview_data",
         "kind": 2,
         "importPath": "code.utils",
