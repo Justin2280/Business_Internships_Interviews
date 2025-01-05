@@ -109,7 +109,7 @@ if interview_previously_completed and not st.session_state.messages:
     st.markdown(completed_message)
     
 # URL to Qualtrics evaluation
-evaluation_url = "https://your.qualtrics.url"
+evaluation_url = "https://leidenuniv.eu.qualtrics.com/jfe/form/SV_bvafC8YWGQJC1Ey"
 
 # Append session ID as query parameter
 evaluation_url_with_session = f"{evaluation_url}?session_id={st.session_state.session_id}"
