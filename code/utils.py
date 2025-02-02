@@ -4,6 +4,7 @@ import time
 import os
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
+import json
 
 
 # Password screen for dashboard (note: only very basic authentication!)
@@ -91,8 +92,12 @@ def save_interview_data(username, transcripts_directory, times_directory, folder
         
 def upload_to_google_drive(file_path, file_name, folder_id):
     """Uploads a file to Google Drive inside a specific folder."""
-    
-    credentials = service_account.Credentials.from_service_account_info(st.secrets["SERVICE_ACCOUNT_JSON"])
+
+    # Convert JSON string to dictionary
+    service_account_info = json.loads(st.secrets["SERVICE_ACCOUNT_JSON"])
+
+    # Authenticate with Google Drive
+    credentials = service_account.Credentials.from_service_account_info(service_account_info)
     service = build("drive", "v3", credentials=credentials)
 
     file_metadata = {
