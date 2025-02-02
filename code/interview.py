@@ -57,14 +57,12 @@ if "session_id" not in st.session_state:
 # Display parameters in sidebar
 st.sidebar.title("Interview Details")
 for param in required_params:
-    # Fetch the first value of the list returned for each parameter and sanitize it
     sanitized_value = html.unescape(query_params[param])
     st.sidebar.write(f"{param.capitalize()}: {sanitized_value}")
 st.sidebar.write(f"Session ID: {st.session_state.session_id}")
 
 # Check if usernames and logins are enabled
 if config.LOGINS:
-    # Check password (displays login screen)
     pwd_correct, username = check_password()
     if not pwd_correct:
         st.stop()
@@ -103,11 +101,9 @@ interview_previously_completed = check_if_interview_completed(
 
 # If app started but interview was previously completed
 if interview_previously_completed and not st.session_state.messages:
-
     st.session_state.interview_active = False
-    completed_message = "Interview already completed."
-    st.markdown(completed_message)
-    
+    st.markdown("### Interview already completed.")
+
 # URL to Qualtrics evaluation
 evaluation_url = "https://leidenuniv.eu.qualtrics.com/jfe/form/SV_bvafC8YWGQJC1Ey"
 
@@ -116,48 +112,50 @@ evaluation_url_with_session = f"{evaluation_url}?session_id={st.session_state.se
 
 # Add 'Quit' button to dashboard
 col1, col2 = st.columns([0.85, 0.15])
-# Place where the second column is
+
 with col2:
-
-    # If interview is active and 'Quit' button is clicked
-    if st.session_state.interview_active and st.button(
-        "Quit", help="End the interview."
-    ):
-
-        # Set interview to inactive, display quit message, and store data
-        st.session_state.interview_active = False
-        quit_message = "You have cancelled the interview."
-        st.session_state.messages.append({"role": "assistant", "content": quit_message})
-        save_interview_data(
-            st.session_state.username,
-            config.TRANSCRIPTS_DIRECTORY,
-            config.TIMES_DIRECTORY,
-        )
+    if st.session_state.interview_active and st.button("Quit", help="End the interview."):
+        st.session_state.interview_active = False  # Mark interview as inactive
+        st.session_state.messages.append({"role": "assistant", "content": "Interview ended."})
         
+        # Save the interview transcript and upload to Google Drive
+        transcript_link = save_interview_data(
+            username=st.session_state.username,
+            transcripts_directory=config.TRANSCRIPTS_DIRECTORY,
+            times_directory=config.TIMES_DIRECTORY,
+        )
+
+        # Store the transcript link in session state
+        st.session_state.transcript_link = transcript_link
+
 # After the interview ends
 if not st.session_state.interview_active:
-    # Clear the screen
-    st.empty()
-    
-    # Center the button on the page
+    st.empty()  # Clear screen
+
+    # Display evaluation button
     st.markdown(
         f"""
         <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
-            <a href="{evaluation_url_with_session}" target="_blank" style="text-decoration: none; background-color: #4CAF50; color: white; padding: 15px 32px; text-align: center; font-size: 16px; border-radius: 8px;">Click here to evaluate the interview</a>
+            <a href="{evaluation_url_with_session}" target="_blank" 
+               style="text-decoration: none; background-color: #4CAF50; color: white; padding: 15px 32px; text-align: center; font-size: 16px; border-radius: 8px;">
+                Click here to evaluate the interview
+            </a>
         </div>
         """,
         unsafe_allow_html=True,
-    )        
+    )
 
+    # Show download link if available
+    if "transcript_link" in st.session_state:
+        st.markdown(f"### 📄 [Download your interview transcript]({st.session_state.transcript_link})", unsafe_allow_html=True)
 
-# Upon rerun, display the previous conversation (except system prompt or first message)
+# Upon rerun, display the previous conversation
 for message in st.session_state.messages[1:]:
-
     if message["role"] == "assistant":
         avatar = config.AVATAR_INTERVIEWER
     else:
         avatar = config.AVATAR_RESPONDENT
-    # Only display messages without codes
+
     if not any(code in message["content"] for code in config.CLOSING_MESSAGES.keys()):
         with st.chat_message(message["role"], avatar=avatar):
             st.markdown(message["content"])

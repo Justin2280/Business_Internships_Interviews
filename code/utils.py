@@ -15,29 +15,25 @@ def get_google_credentials():
 
 def authenticate_drive():
     """Authenticate and return the Google Drive service instance."""
-    credentials = service_account.Credentials.from_service_account_file(
-        SERVICE_ACCOUNT_FILE, scopes=SCOPES
-    )
+    credentials = get_google_credentials()
     return build("drive", "v3", credentials=credentials)
 
 def upload_to_google_drive(file_path, file_name):
     """Upload a file to Google Drive and return its shareable link."""
     service = authenticate_drive()
-
     file_metadata = {"name": file_name}
     media = MediaFileUpload(file_path, mimetype="text/plain")
-
+    
     file = service.files().create(body=file_metadata, media_body=media, fields="id").execute()
     file_id = file.get("id")
 
     # Make the file accessible via link
     service.permissions().create(
         fileId=file_id,
-        body={"role": "reader", "type": "anyone"}  # Change "anyone" to "user" and specify email for restricted access
+        body={"role": "reader", "type": "anyone"}  # Change "anyone" to "user" for restricted access
     ).execute()
 
     shareable_link = f"https://drive.google.com/file/d/{file_id}/view?usp=sharing"
-    print(f"File Uploaded: {shareable_link}")
     return shareable_link
 
 # Password screen for dashboard (basic authentication)
@@ -107,5 +103,6 @@ def save_interview_data(username, transcripts_directory, times_directory, file_n
     try:
         shareable_link = upload_to_google_drive(transcript_path, f"{username}_transcript.txt")
         print(f"Transcript uploaded successfully: {shareable_link}")
+        return shareable_link  # Return the download link
     except Exception as e:
         print(f"Failed to upload transcript: {e}")
