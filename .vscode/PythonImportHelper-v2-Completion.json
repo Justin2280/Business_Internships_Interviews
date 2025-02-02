@@ -87,6 +87,31 @@
         "documentation": {}
     },
     {
+        "label": "service_account",
+        "importPath": "google.oauth2",
+        "description": "google.oauth2",
+        "isExtraImport": true,
+        "detail": "google.oauth2",
+        "documentation": {}
+    },
+    {
+        "label": "build",
+        "importPath": "googleapiclient.discovery",
+        "description": "googleapiclient.discovery",
+        "isExtraImport": true,
+        "detail": "googleapiclient.discovery",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
         "label": "INTERVIEW_OUTLINE",
         "kind": 5,
         "importPath": "code.config",
@@ -280,7 +305,7 @@
         "kind": 5,
         "importPath": "code.interview",
         "description": "code.interview",
-        "peekOfCode": "evaluation_url = \"https://leidenuniv.eu.qualtrics.com/jfe/form/SV_bvafC8YWGQJC1Ey\"\n# Append session ID as query parameter\nevaluation_url_with_session = f\"{evaluation_url}?session_id={st.session_state.session_id}\"\n# Add 'Quit' button to dashboard\ncol1, col2 = st.columns([0.85, 0.15])\n# Place where the second column is\nwith col2:\n    # If interview is active and 'Quit' button is clicked\n    if st.session_state.interview_active and st.button(\n        \"Quit\", help=\"End the interview.\"",
+        "peekOfCode": "evaluation_url = \"https://leidenuniv.eu.qualtrics.com/jfe/form/SV_bvafC8YWGQJC1Ey\"\n# Append session ID as query parameter\nevaluation_url_with_session = f\"{evaluation_url}?session_id={st.session_state.session_id}\"\n# Add 'Quit' button to dashboard\ncol1, col2 = st.columns([0.85, 0.15])\n# Place where the second column is\nwith col2:\n    # If interview is active and 'Quit' button is clicked\n    if st.session_state.interview_active and st.button(\"Quit\", help=\"End the interview.\"):\n        st.session_state.interview_active = False",
         "detail": "code.interview",
         "documentation": {}
     },
@@ -289,7 +314,7 @@
         "kind": 5,
         "importPath": "code.interview",
         "description": "code.interview",
-        "peekOfCode": "evaluation_url_with_session = f\"{evaluation_url}?session_id={st.session_state.session_id}\"\n# Add 'Quit' button to dashboard\ncol1, col2 = st.columns([0.85, 0.15])\n# Place where the second column is\nwith col2:\n    # If interview is active and 'Quit' button is clicked\n    if st.session_state.interview_active and st.button(\n        \"Quit\", help=\"End the interview.\"\n    ):\n        # Set interview to inactive, display quit message, and store data",
+        "peekOfCode": "evaluation_url_with_session = f\"{evaluation_url}?session_id={st.session_state.session_id}\"\n# Add 'Quit' button to dashboard\ncol1, col2 = st.columns([0.85, 0.15])\n# Place where the second column is\nwith col2:\n    # If interview is active and 'Quit' button is clicked\n    if st.session_state.interview_active and st.button(\"Quit\", help=\"End the interview.\"):\n        st.session_state.interview_active = False\n        quit_message = \"You have cancelled the interview.\"\n        st.session_state.messages.append({\"role\": \"assistant\", \"content\": quit_message})",
         "detail": "code.interview",
         "documentation": {}
     },
@@ -343,7 +368,16 @@
         "kind": 2,
         "importPath": "code.utils",
         "description": "code.utils",
-        "peekOfCode": "def save_interview_data(\n    username,\n    transcripts_directory,\n    times_directory,\n    file_name_addition_transcript=\"\",\n    file_name_addition_time=\"\",\n):\n    \"\"\"Write interview data (transcript and time) to disk.\"\"\"\n    # Store chat transcript with session ID\n    with open(",
+        "peekOfCode": "def save_interview_data(username, transcripts_directory, times_directory, folder_id):\n    \"\"\"Save interview data locally and upload to Google Drive.\"\"\"\n    # Define file paths\n    transcript_file = os.path.join(transcripts_directory, f\"{username}.txt\")\n    time_file = os.path.join(times_directory, f\"{username}.txt\")\n    # Save transcript\n    with open(transcript_file, \"w\") as t:\n        t.write(f\"Session ID: {st.session_state.session_id}\\n\\n\")\n        for message in st.session_state.messages:\n            t.write(f\"{message['role']}: {message['content']}\\n\")",
+        "detail": "code.utils",
+        "documentation": {}
+    },
+    {
+        "label": "upload_to_google_drive",
+        "kind": 2,
+        "importPath": "code.utils",
+        "description": "code.utils",
+        "peekOfCode": "def upload_to_google_drive(file_path, file_name, folder_id):\n    \"\"\"Uploads a file to Google Drive inside a specific folder.\"\"\"\n    # Convert JSON string to dictionary\n    service_account_info_str = st.secrets[\"SERVICE_ACCOUNT_JSON\"]\n    # Authenticate with Google Drive\n    credentials = service_account.Credentials.from_service_account_info(service_account_info)\n    service = build(\"drive\", \"v3\", credentials=credentials)\n    file_metadata = {\n        \"name\": file_name,\n        \"parents\": [folder_id]  # Folder ID where the file will be uploaded",
         "detail": "code.utils",
         "documentation": {}
     }

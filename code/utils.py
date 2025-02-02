@@ -94,7 +94,7 @@ def upload_to_google_drive(file_path, file_name, folder_id):
     """Uploads a file to Google Drive inside a specific folder."""
 
     # Convert JSON string to dictionary
-    service_account_info = json.loads(st.secrets["SERVICE_ACCOUNT_JSON"])
+    service_account_info_str = st.secrets["SERVICE_ACCOUNT_JSON"]
 
     # Authenticate with Google Drive
     credentials = service_account.Credentials.from_service_account_info(service_account_info)
