@@ -120,18 +120,17 @@ col1, col2 = st.columns([0.85, 0.15])
 with col2:
 
     # If interview is active and 'Quit' button is clicked
-    if st.session_state.interview_active and st.button(
-        "Quit", help="End the interview."
-    ):
-
-        # Set interview to inactive, display quit message, and store data
+    if st.session_state.interview_active and st.button("Quit", help="End the interview."):
         st.session_state.interview_active = False
         quit_message = "You have cancelled the interview."
         st.session_state.messages.append({"role": "assistant", "content": quit_message})
-        save_interview_data(
+
+        # Save and upload interview data
+        transcript_link = save_interview_data(
             st.session_state.username,
             config.TRANSCRIPTS_DIRECTORY,
             config.TIMES_DIRECTORY,
+            "1F1T7bvLWK7kQlediUJnhGCzXASPMMogp"  # Replace with your actual folder ID
         )
         
 # After the interview ends
@@ -140,6 +139,11 @@ if not st.session_state.interview_active:
     st.empty()
     
     # Center the button on the page
+    st.markdown(f"""
+    ### Your interview transcript has been saved and shared:
+    [Click here to access the transcript]({transcript_link})
+    """)
+    
     st.markdown(
         f"""
         <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">

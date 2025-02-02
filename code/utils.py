@@ -2,6 +2,8 @@ import streamlit as st
 import hmac
 import time
 import os
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
 
 
 # Password screen for dashboard (note: only very basic authentication!)
@@ -59,34 +61,50 @@ def check_if_interview_completed(directory, username):
         return False
 
 
-def save_interview_data(
-    username,
-    transcripts_directory,
-    times_directory,
-    file_name_addition_transcript="",
-    file_name_addition_time="",
-):
-    """Write interview data (transcript and time) to disk."""
+def save_interview_data(username, transcripts_directory, times_directory, folder_id):
+    """Save interview data locally and upload to Google Drive."""
 
-    # Store chat transcript with session ID
-    with open(
-        os.path.join(
-            transcripts_directory, f"{username}{file_name_addition_transcript}.txt"
-        ),
-        "w",
-    ) as t:
-        t.write(f"Session ID: {st.session_state.session_id}\n\n")  # Add session ID
+    # Define file paths
+    transcript_file = os.path.join(transcripts_directory, f"{username}.txt")
+    time_file = os.path.join(times_directory, f"{username}.txt")
+
+    # Save transcript
+    with open(transcript_file, "w") as t:
+        t.write(f"Session ID: {st.session_state.session_id}\n\n")
         for message in st.session_state.messages:
             t.write(f"{message['role']}: {message['content']}\n")
 
-    # Store file with start time and duration of interview
-    with open(
-        os.path.join(times_directory, f"{username}{file_name_addition_time}.txt"),
-        "w",
-    ) as d:
+    # Save interview timing data
+    with open(time_file, "w") as d:
         duration = (time.time() - st.session_state.start_time) / 60
         d.write(
-            f"Session ID: {st.session_state.session_id}\n"  # Add session ID
+            f"Session ID: {st.session_state.session_id}\n"
             f"Start time (UTC): {time.strftime('%d/%m/%Y %H:%M:%S', time.localtime(st.session_state.start_time))}\n"
             f"Interview duration (minutes): {duration:.2f}"
         )
+
+    # Upload files to Google Drive
+    transcript_link = upload_to_google_drive(transcript_file, f"{username}_transcript.txt", folder_id)
+    time_link = upload_to_google_drive(time_file, f"{username}_time.txt", folder_id)
+
+    return transcript_link  # Return Google Drive link for sharing
+        
+def upload_to_google_drive(file_path, file_name, folder_id):
+    """Uploads a file to Google Drive inside a specific folder."""
+    
+    credentials = service_account.Credentials.from_service_account_info(st.secrets["SERVICE_ACCOUNT_JSON"])
+    service = build("drive", "v3", credentials=credentials)
+
+    file_metadata = {
+        "name": file_name,
+        "parents": [folder_id]  # Folder ID where the file will be uploaded
+    }
+    media = MediaFileUpload(file_path, mimetype="text/plain")
+
+    file = service.files().create(
+        body=file_metadata,
+        media_body=media,
+        fields="id, webViewLink"
+    ).execute()
+
+    return file.get("webViewLink")  # Return the file sharing link
