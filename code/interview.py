@@ -297,21 +297,22 @@ if st.session_state.interview_active:
                     {"role": "assistant", "content": message_interviewer}
                 )
 
-                # Regularly store interview progress as backup, but prevent script from
-                # stopping in case of a write error
-                try:
+                # # Regularly store interview progress as backup, but prevent script from
+                # # stopping in case of a write error
+                # try:
 
-                    save_interview_data(
-                    username=st.session_state.username,
-                    transcripts_directory=config.TRANSCRIPTS_DIRECTORY,
-                    times_directory=config.TIMES_DIRECTORY,
-                    folder_id="1F1T7bvLWK7kQlediUJnhGCzXASPMMogp",
-                    student_number=query_params["student_number"],
-                    company_name=query_params["company"] )
+                #     save_interview_data(
+                #     username=st.session_state.username,
+                #     transcripts_directory=config.TRANSCRIPTS_DIRECTORY,
+                #     times_directory=config.TIMES_DIRECTORY,
+                #     folder_id="1F1T7bvLWK7kQlediUJnhGCzXASPMMogp",
+                #     student_number=query_params["student_number"],
+                #     company_name=query_params["company"] )
 
-                except:
+                # except:
 
-                    pass
+                #     pass
+                # It saves the interview data every 5 seconds, that is redundant
 
             # If code in the message, display the associated closing message instead
             # Loop over all codes
