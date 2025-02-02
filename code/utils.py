@@ -4,6 +4,7 @@ import time
 import os
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload
 import json
 
 
@@ -93,8 +94,12 @@ def save_interview_data(username, transcripts_directory, times_directory, folder
 def upload_to_google_drive(file_path, file_name, folder_id):
     """Uploads a file to Google Drive inside a specific folder."""
 
-    # Convert JSON string to dictionary
+    # Retrieve and parse the JSON from Streamlit secrets
     service_account_info = json.loads(st.secrets["SERVICE_ACCOUNT_JSON"])
+
+    # Ensure the private_key is correctly formatted
+    if "\\n" in service_account_info["private_key"]:
+        service_account_info["private_key"] = service_account_info["private_key"].replace("\\n", "\n")
 
     # Authenticate with Google Drive
     credentials = service_account.Credentials.from_service_account_info(service_account_info)
