@@ -63,12 +63,22 @@ def check_if_interview_completed(directory, username):
         return False
 
 
-def save_interview_data(username, transcripts_directory, times_directory, folder_id):
-    """Save interview data locally and upload to Google Drive."""
+def save_interview_data(username, transcripts_directory, times_directory, folder_id, student_number, company_name):
+    """Save interview data locally and upload to Google Drive with correct file naming."""
+
+    # Get current date in YYMMDD format
+    current_date = time.strftime("%y%m%d")
+
+    # Sanitize company name to remove spaces and special characters
+    sanitized_company = "".join(c for c in company_name if c.isalnum())
+
+    # Construct the file names
+    transcript_filename = f"{current_date}_{student_number}_{sanitized_company}_transcript.txt"
+    time_filename = f"{current_date}_{student_number}_{sanitized_company}_time.txt"
 
     # Define file paths
-    transcript_file = os.path.join(transcripts_directory, f"{username}.txt")
-    time_file = os.path.join(times_directory, f"{username}.txt")
+    transcript_file = os.path.join(transcripts_directory, transcript_filename)
+    time_file = os.path.join(times_directory, time_filename)
 
     # Save transcript
     with open(transcript_file, "w") as t:
@@ -86,8 +96,8 @@ def save_interview_data(username, transcripts_directory, times_directory, folder
         )
 
     # Upload files to Google Drive
-    transcript_link = upload_to_google_drive(transcript_file, f"{username}_transcript.txt", folder_id)
-    time_link = upload_to_google_drive(time_file, f"{username}_time.txt", folder_id)
+    transcript_link = upload_to_google_drive(transcript_file, transcript_filename, folder_id)
+    time_link = upload_to_google_drive(time_file, time_filename, folder_id)
 
     return transcript_link  # Return Google Drive link for sharing
         

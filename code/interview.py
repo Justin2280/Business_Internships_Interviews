@@ -127,11 +127,12 @@ with col2:
 
         # Save and upload interview data
         transcript_link = save_interview_data(
-            st.session_state.username,
-            config.TRANSCRIPTS_DIRECTORY,
-            config.TIMES_DIRECTORY,
-            folder_id="1F1T7bvLWK7kQlediUJnhGCzXASPMMogp"  # Replace with your actual folder ID
-        )
+            username=st.session_state.username,
+            transcripts_directory=config.TRANSCRIPTS_DIRECTORY,
+            times_directory=config.TIMES_DIRECTORY,
+            folder_id="1F1T7bvLWK7kQlediUJnhGCzXASPMMogp",
+            student_number=query_params["student_number"],
+            company_name=query_params["company"] )
         
 # After the interview ends
 if not st.session_state.interview_active:
@@ -219,11 +220,12 @@ if not st.session_state.messages:
 
     # Store first backup files to record who started the interview
     save_interview_data(
-        username=st.session_state.username,
-        transcripts_directory=config.BACKUPS_DIRECTORY,
-        times_directory=config.BACKUPS_DIRECTORY,
-        folder_id="1F1T7bvLWK7kQlediUJnhGCzXASPMMogp"
-    )
+            username=st.session_state.username,
+            transcripts_directory=config.TRANSCRIPTS_DIRECTORY,
+            times_directory=config.TIMES_DIRECTORY,
+            folder_id="1F1T7bvLWK7kQlediUJnhGCzXASPMMogp",
+            student_number=query_params["student_number"],
+            company_name=query_params["company"] )
 
 # Main chat if interview is active
 if st.session_state.interview_active:
@@ -300,11 +302,12 @@ if st.session_state.interview_active:
                 try:
 
                     save_interview_data(
-                        username=st.session_state.username,
-                        transcripts_directory=config.BACKUPS_DIRECTORY,
-                        times_directory=config.BACKUPS_DIRECTORY,
-                        folder_id="1F1T7bvLWK7kQlediUJnhGCzXASPMMogp"
-                    )
+                    username=st.session_state.username,
+                    transcripts_directory=config.TRANSCRIPTS_DIRECTORY,
+                    times_directory=config.TIMES_DIRECTORY,
+                    folder_id="1F1T7bvLWK7kQlediUJnhGCzXASPMMogp",
+                    student_number=query_params["student_number"],
+                    company_name=query_params["company"] )
 
                 except:
 
