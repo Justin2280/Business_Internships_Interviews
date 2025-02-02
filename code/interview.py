@@ -130,7 +130,7 @@ with col2:
             st.session_state.username,
             config.TRANSCRIPTS_DIRECTORY,
             config.TIMES_DIRECTORY,
-            "1F1T7bvLWK7kQlediUJnhGCzXASPMMogp"  # Replace with your actual folder ID
+            folder_id="1F1T7bvLWK7kQlediUJnhGCzXASPMMogp"  # Replace with your actual folder ID
         )
         
 # After the interview ends
@@ -222,7 +222,7 @@ if not st.session_state.messages:
         username=st.session_state.username,
         transcripts_directory=config.BACKUPS_DIRECTORY,
         times_directory=config.BACKUPS_DIRECTORY,
-        "1F1T7bvLWK7kQlediUJnhGCzXASPMMogp"
+        folder_id="1F1T7bvLWK7kQlediUJnhGCzXASPMMogp"
     )
 
 # Main chat if interview is active
