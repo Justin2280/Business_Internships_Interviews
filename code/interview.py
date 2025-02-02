@@ -222,8 +222,7 @@ if not st.session_state.messages:
         username=st.session_state.username,
         transcripts_directory=config.BACKUPS_DIRECTORY,
         times_directory=config.BACKUPS_DIRECTORY,
-        file_name_addition_transcript=f"_transcript_started_{st.session_state.start_time_file_names}",
-        file_name_addition_time=f"_time_started_{st.session_state.start_time_file_names}",
+        "1F1T7bvLWK7kQlediUJnhGCzXASPMMogp"
     )
 
 # Main chat if interview is active
@@ -304,8 +303,7 @@ if st.session_state.interview_active:
                         username=st.session_state.username,
                         transcripts_directory=config.BACKUPS_DIRECTORY,
                         times_directory=config.BACKUPS_DIRECTORY,
-                        file_name_addition_transcript=f"_transcript_started_{st.session_state.start_time_file_names}",
-                        file_name_addition_time=f"_time_started_{st.session_state.start_time_file_names}",
+                        "1F1T7bvLWK7kQlediUJnhGCzXASPMMogp"
                     )
 
                 except:
