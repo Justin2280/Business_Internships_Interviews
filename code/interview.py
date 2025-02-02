@@ -7,7 +7,7 @@ from utils import (
 )
 import os
 import config
-import html  # For sanitizing query parameters
+import html
 import uuid
 
 # Load API library
@@ -19,9 +19,7 @@ elif "claude" in config.MODEL.lower():
     api = "anthropic"
     import anthropic
 else:
-    raise ValueError(
-        "Model does not contain 'gpt' or 'claude'; unable to determine API."
-    )
+    raise ValueError("Model does not contain 'gpt' or 'claude'; unable to determine API.")
 
 # Set page title and icon
 st.set_page_config(page_title="Interview", page_icon=config.AVATAR_INTERVIEWER)
@@ -29,9 +27,7 @@ st.set_page_config(page_title="Interview", page_icon=config.AVATAR_INTERVIEWER)
 # Function to validate query parameters
 def validate_query_params(params, required_keys):
     missing_keys = [key for key in required_keys if key not in params or not params[key]]
-    if missing_keys:
-        return False, missing_keys
-    return True, []
+    return len(missing_keys) == 0, missing_keys
 
 # Extract query parameters
 query_params = st.query_params
@@ -42,7 +38,7 @@ required_params = ["student_number", "name", "company"]
 # Validate parameters
 is_valid, missing_params = validate_query_params(query_params, required_params)
 
-# Display error and stop if parameters are missing
+# Stop execution if parameters are missing
 if not is_valid:
     st.error(f"Missing required parameter(s): {', '.join(missing_params)}")
     st.stop()
@@ -50,18 +46,17 @@ if not is_valid:
 # Extract respondent's name
 respondent_name = html.unescape(query_params["name"])
 
-# Check if session ID exists in session state, if not, create one
+# Generate a session ID if it doesn't exist
 if "session_id" not in st.session_state:
     st.session_state.session_id = str(uuid.uuid4())
 
-# Display parameters in sidebar
+# Sidebar with interview details
 st.sidebar.title("Interview Details")
 for param in required_params:
-    sanitized_value = html.unescape(query_params[param])
-    st.sidebar.write(f"{param.capitalize()}: {sanitized_value}")
+    st.sidebar.write(f"{param.capitalize()}: {html.unescape(query_params[param])}")
 st.sidebar.write(f"Session ID: {st.session_state.session_id}")
 
-# Check if usernames and logins are enabled
+# Handle login authentication
 if config.LOGINS:
     pwd_correct, username = check_password()
     if not pwd_correct:
@@ -71,54 +66,29 @@ if config.LOGINS:
 else:
     st.session_state.username = "testaccount"
 
-# Create directories if they do not already exist
-if not os.path.exists(config.TRANSCRIPTS_DIRECTORY):
-    os.makedirs(config.TRANSCRIPTS_DIRECTORY)
-if not os.path.exists(config.TIMES_DIRECTORY):
-    os.makedirs(config.TIMES_DIRECTORY)
-if not os.path.exists(config.BACKUPS_DIRECTORY):
-    os.makedirs(config.BACKUPS_DIRECTORY)
+# Ensure necessary directories exist
+for directory in [config.TRANSCRIPTS_DIRECTORY, config.TIMES_DIRECTORY, config.BACKUPS_DIRECTORY]:
+    os.makedirs(directory, exist_ok=True)
 
-# Initialise session state
-if "interview_active" not in st.session_state:
-    st.session_state.interview_active = True
+# Initialize session state
+st.session_state.setdefault("interview_active", True)
+st.session_state.setdefault("messages", [])
+st.session_state.setdefault("start_time", time.time())
+st.session_state.setdefault("transcript_link", None)
 
-# Initialise messages list in session state
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-
-# Store start time in session state
-if "start_time" not in st.session_state:
-    st.session_state.start_time = time.time()
-    st.session_state.start_time_file_names = time.strftime(
-        "%Y_%m_%d_%H_%M_%S", time.localtime(st.session_state.start_time)
-    )
-
-# Check if interview previously completed
-interview_previously_completed = check_if_interview_completed(
-    config.TIMES_DIRECTORY, st.session_state.username
-)
-
-# If app started but interview was previously completed
-if interview_previously_completed and not st.session_state.messages:
+# Check if the interview was previously completed
+if check_if_interview_completed(config.TIMES_DIRECTORY, st.session_state.username):
     st.session_state.interview_active = False
     st.markdown("### Interview already completed.")
 
-# URL to Qualtrics evaluation
-evaluation_url = "https://leidenuniv.eu.qualtrics.com/jfe/form/SV_bvafC8YWGQJC1Ey"
-
-# Append session ID as query parameter
-evaluation_url_with_session = f"{evaluation_url}?session_id={st.session_state.session_id}"
-
-# Add 'Quit' button to dashboard
+# Quit button
 col1, col2 = st.columns([0.85, 0.15])
-
 with col2:
     if st.session_state.interview_active and st.button("Quit", help="End the interview."):
         st.session_state.interview_active = False  # Mark interview as inactive
         st.session_state.messages.append({"role": "assistant", "content": "Interview ended."})
-        
-        # Save the interview transcript and upload to Google Drive
+
+        # Save and upload the transcript
         transcript_link = save_interview_data(
             username=st.session_state.username,
             transcripts_directory=config.TRANSCRIPTS_DIRECTORY,
@@ -126,16 +96,18 @@ with col2:
         )
 
         # Store the transcript link in session state
-        st.session_state.transcript_link = transcript_link
+        if transcript_link:
+            st.session_state.transcript_link = transcript_link
 
 # After the interview ends
 if not st.session_state.interview_active:
     st.empty()  # Clear screen
 
-    # Display evaluation button
+    # Display the evaluation button
+    evaluation_url_with_session = f"https://leidenuniv.eu.qualtrics.com/jfe/form/SV_bvafC8YWGQJC1Ey?session_id={st.session_state.session_id}"
     st.markdown(
         f"""
-        <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+        <div style="text-align: center;">
             <a href="{evaluation_url_with_session}" target="_blank" 
                style="text-decoration: none; background-color: #4CAF50; color: white; padding: 15px 32px; text-align: center; font-size: 16px; border-radius: 8px;">
                 Click here to evaluate the interview
@@ -145,9 +117,11 @@ if not st.session_state.interview_active:
         unsafe_allow_html=True,
     )
 
-    # Show download link if available
-    if "transcript_link" in st.session_state:
+    # Show transcript download link if available
+    if st.session_state.transcript_link:
         st.markdown(f"### 📄 [Download your interview transcript]({st.session_state.transcript_link})", unsafe_allow_html=True)
+    else:
+        st.warning("⚠️ No transcript link available. Please try again later.")
 
 # Upon rerun, display the previous conversation
 for message in st.session_state.messages[1:]:
