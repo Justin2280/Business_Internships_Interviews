@@ -303,7 +303,7 @@ if st.session_state.interview_active:
                         username=st.session_state.username,
                         transcripts_directory=config.BACKUPS_DIRECTORY,
                         times_directory=config.BACKUPS_DIRECTORY,
-                        "1F1T7bvLWK7kQlediUJnhGCzXASPMMogp"
+                        folder_id="1F1T7bvLWK7kQlediUJnhGCzXASPMMogp"
                     )
 
                 except:
