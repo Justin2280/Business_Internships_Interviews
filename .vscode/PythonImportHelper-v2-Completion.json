@@ -388,5 +388,14 @@
         "peekOfCode": "def upload_to_google_drive(file_path, file_name, folder_id):\n    \"\"\"Uploads a file to Google Drive inside a specific folder.\"\"\"\n    # Retrieve and parse the JSON from Streamlit secrets\n    service_account_info = json.loads(st.secrets[\"SERVICE_ACCOUNT_JSON\"])\n    # Ensure the private_key is correctly formatted\n    if \"\\\\n\" in service_account_info[\"private_key\"]:\n        service_account_info[\"private_key\"] = service_account_info[\"private_key\"].replace(\"\\\\n\", \"\\n\")\n    # Authenticate with Google Drive\n    credentials = service_account.Credentials.from_service_account_info(service_account_info)\n    service = build(\"drive\", \"v3\", credentials=credentials)",
         "detail": "code.utils",
         "documentation": {}
+    },
+    {
+        "label": "send_transcript_email",
+        "kind": 2,
+        "importPath": "code.utils",
+        "description": "code.utils",
+        "peekOfCode": "def send_transcript_email(student_number, transcript_link):\n    \"\"\"\n    Sends the interview transcript to the student using Strato's SMTP.\n    \"\"\"\n    smtp_server = \"smtp.strato.com\"  # Replace with your Strato SMTP server\n    smtp_port = 587  # Port for TLS\n    sender_email = \"BusinessInternships@jt-techsolutions.nl\"  # Your email\n    sender_password = st.secrets[\"STRATO_EMAIL_PASSWORD\"]  # Store password securely\n    student_email = f\"{student_number}@vuw.leidenuniv.nl\"\n    # Create email message",
+        "detail": "code.utils",
+        "documentation": {}
     }
 ]

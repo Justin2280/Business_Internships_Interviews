@@ -128,3 +128,44 @@ def upload_to_google_drive(file_path, file_name, folder_id):
     ).execute()
 
     return file.get("webViewLink")  # Return the file sharing link
+
+def send_transcript_email(student_number, transcript_link):
+    """
+    Sends the interview transcript to the student using Strato's SMTP.
+    """
+    smtp_server = "smtp.strato.com"  # Replace with your Strato SMTP server
+    smtp_port = 587  # Port for TLS
+    sender_email = "BusinessInternships@jt-techsolutions.nl"  # Your email
+    sender_password = st.secrets["STRATO_EMAIL_PASSWORD"]  # Store password securely
+    student_email = f"{student_number}@vuw.leidenuniv.nl"
+
+    # Create email message
+    msg = MIMEMultipart()
+    msg["From"] = sender_email
+    msg["To"] = student_email
+    msg["Subject"] = "Your Interview Transcript from Leiden University"
+
+    body = f"""
+    Dear Student,
+
+    Thank you for participating in the interview. Your transcript has been saved.
+
+    You can download your transcript here:
+    {transcript_link}
+
+    Best regards,  
+    Leiden University Interview System
+    """
+
+    msg.attach(MIMEText(body, "plain"))
+
+    try:
+        # Connect to Strato's SMTP server
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.starttls()  # Secure connection
+        server.login(sender_email, sender_password)
+        server.sendmail(sender_email, student_email, msg.as_string())
+        server.quit()
+        print(f"Email sent to {student_email}")
+    except Exception as e:
+        print(f"Error sending email: {e}")

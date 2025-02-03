@@ -134,6 +134,9 @@ with col2:
             student_number=query_params["student_number"],
             company_name=query_params["company"] )
         
+        # Send email transscript
+        send_transcript_email(query_params["student_number"], transcript_link)
+        
 # After the interview ends
 if not st.session_state.interview_active:
     # Clear the screen
