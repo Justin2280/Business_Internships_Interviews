@@ -42,6 +42,14 @@
         "documentation": {}
     },
     {
+        "label": "send_transcript_email",
+        "importPath": "utils",
+        "description": "utils",
+        "isExtraImport": true,
+        "detail": "utils",
+        "documentation": {}
+    },
+    {
         "label": "os",
         "kind": 6,
         "isExtraImport": true,
