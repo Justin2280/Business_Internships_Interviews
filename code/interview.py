@@ -221,6 +221,8 @@ if not st.session_state.messages:
     st.session_state.messages.append(
         {"role": "assistant", "content": message_interviewer}
     )
+    
+    # Commented out as it does not overwrite old file and create duplicates
 
     # Store first backup files to record who started the interview
     # save_interview_data(
@@ -301,6 +303,10 @@ if st.session_state.interview_active:
                     {"role": "assistant", "content": message_interviewer}
                 )
 
+                
+                
+                # Commented out as it does not overwrite old file and create duplicates
+                
                 # # Regularly store interview progress as backup, but prevent script from
                 # # stopping in case of a write error
                 # try:
