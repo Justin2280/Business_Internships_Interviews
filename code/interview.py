@@ -38,7 +38,7 @@ def validate_query_params(params, required_keys):
 query_params = st.query_params
 
 # Define required parameters
-required_params = ["student_number", "name", "company"]
+required_params = ["student_number", "name", "company", "recipient_email"]
 
 # Validate parameters
 is_valid, missing_params = validate_query_params(query_params, required_params)
@@ -50,6 +50,7 @@ if not is_valid:
 
 # Extract respondent's name
 respondent_name = html.unescape(query_params["name"])
+recipient_email = html.unescape(query_params["recipient_email"])
 
 # Check if session ID exists in session state, if not, create one
 if "session_id" not in st.session_state:
@@ -60,7 +61,8 @@ st.sidebar.title("Interview Details")
 for param in required_params:
     # Fetch the first value of the list returned for each parameter and sanitize it
     sanitized_value = html.unescape(query_params[param])
-    st.sidebar.write(f"{param.capitalize()}: {sanitized_value}")
+    st.sidebar.write(f"{param.replace('_', ' ').capitalize()}: {sanitized_value}")
+
 st.sidebar.write(f"Session ID: {st.session_state.session_id}")
 
 # Check if usernames and logins are enabled
@@ -136,7 +138,7 @@ with col2:
             company_name=query_params["company"])
         
         # Send email transscript
-        send_transcript_email(query_params["student_number"], transcript_link)
+        send_transcript_email(query_params["student_number"], query_params["recipient_email"], transcript_link)
         
 # After the interview ends
 if not st.session_state.interview_active:

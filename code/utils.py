@@ -160,7 +160,7 @@ def upload_to_google_drive(file_path, file_name, folder_id):
 
         return new_file.get("webViewLink") # Return the file sharing link
 
-def send_transcript_email(student_number, transcript_link):
+def send_transcript_email(student_number, recipient_email, transcript_link):
     """
     Sends the interview transcript to the student using Strato's SMTP.
     """
@@ -173,7 +173,7 @@ def send_transcript_email(student_number, transcript_link):
     # Create email message
     msg = MIMEMultipart()
     msg["From"] = sender_email
-    msg["To"] = student_email
+    msg["To"] = f"{student_email}, {recipient_email}"
     msg["Subject"] = "Your Interview Transcript from Leiden University"
 
     body = f"""
