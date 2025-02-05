@@ -225,13 +225,13 @@ if not st.session_state.messages:
     # Commented out as it does not overwrite old file and create duplicates
 
     # Store first backup files to record who started the interview
-    # save_interview_data(
-    #         username=st.session_state.username,
-    #         transcripts_directory=config.TRANSCRIPTS_DIRECTORY,
-    #         times_directory=config.TIMES_DIRECTORY,
-    #         folder_id="123xBZ2YDy8BZrbErQb0U9TpGY-j3NdK7",
-    #         student_number=query_params["student_number"],
-    #         company_name=query_params["company"] )
+    save_interview_data(
+            username=st.session_state.username,
+            transcripts_directory=config.TRANSCRIPTS_DIRECTORY,
+            times_directory=config.TIMES_DIRECTORY,
+            folder_id="123xBZ2YDy8BZrbErQb0U9TpGY-j3NdK7",
+            student_number=query_params["student_number"],
+            company_name=query_params["company"] )
 
 # Main chat if interview is active
 if st.session_state.interview_active:
@@ -309,19 +309,19 @@ if st.session_state.interview_active:
                 
                 # # Regularly store interview progress as backup, but prevent script from
                 # # stopping in case of a write error
-                # try:
+                try:
 
-                #     save_interview_data(
-                #     username=st.session_state.username,
-                #     transcripts_directory=config.TRANSCRIPTS_DIRECTORY,
-                #     times_directory=config.TIMES_DIRECTORY,
-                #     folder_id="123xBZ2YDy8BZrbErQb0U9TpGY-j3NdK7",
-                #     student_number=query_params["student_number"],
-                #     company_name=query_params["company"] )
+                    save_interview_data(
+                    username=st.session_state.username,
+                    transcripts_directory=config.TRANSCRIPTS_DIRECTORY,
+                    times_directory=config.TIMES_DIRECTORY,
+                    folder_id="123xBZ2YDy8BZrbErQb0U9TpGY-j3NdK7",
+                    student_number=query_params["student_number"],
+                    company_name=query_params["company"] )
 
-                # except:
+                except:
 
-                #     pass
+                    pass
                 # It saves the interview data every 5 seconds, that is redundant
 
             # If code in the message, display the associated closing message instead

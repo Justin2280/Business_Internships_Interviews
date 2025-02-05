@@ -105,7 +105,7 @@ def save_interview_data(username, transcripts_directory, times_directory, folder
     return transcript_link  # Return Google Drive link for sharing
         
 def upload_to_google_drive(file_path, file_name, folder_id):
-    """Uploads a file to Google Drive inside a specific folder."""
+    """Uploads a file to Google Drive, overwriting an existing one if found."""
 
     # Retrieve and parse the JSON from Streamlit secrets
     service_account_info = json.loads(st.secrets["SERVICE_ACCOUNT_JSON"])
@@ -118,6 +118,17 @@ def upload_to_google_drive(file_path, file_name, folder_id):
     credentials = service_account.Credentials.from_service_account_info(service_account_info)
     service = build("drive", "v3", credentials=credentials)
 
+    # Step 1: Search for existing file in the folder
+    query = f"'{folder_id}' in parents and name='{file_name}' and trashed=false"
+    response = service.files().list(q=query, fields="files(id, webViewLink)").execute()
+    files = response.get("files", [])
+
+    # Step 2: If file exists, delete it before re-uploading
+    if files:
+        existing_file_id = files[0]["id"]
+        service.files().delete(fileId=existing_file_id).execute()  # Delete the existing file
+
+    # Step 3: Upload the new file
     file_metadata = {
         "name": file_name,
         "parents": [folder_id]  # Folder ID where the file will be uploaded
