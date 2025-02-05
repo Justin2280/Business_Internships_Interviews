@@ -124,16 +124,24 @@ def upload_to_google_drive(file_path, file_name, folder_id):
     files = response.get("files", [])
 
     if files:
-            # If file exists, update it instead of deleting & re-uploading
-            existing_file_id = files[0]["id"]
-            media = MediaFileUpload(file_path, mimetype="text/plain", resumable=True)
+        # If file exists, update it instead of re-uploading
+        existing_file_id = files[0]["id"]
+        media = MediaFileUpload(file_path, mimetype="text/plain", resumable=True)
 
-            updated_file = service.files().update(
-                fileId=existing_file_id,
-                media_body=media
-            ).execute()
+        updated_file = service.files().update(
+            fileId=existing_file_id,
+            media_body=media
+        ).execute()
 
-            return updated_file.get("webViewLink")
+        # Ensure the file has public sharing permissions
+        service.permissions().create(
+            fileId=existing_file_id,
+            body={"type": "anyone", "role": "reader"}
+        ).execute()
+
+        # Fetch the updated sharing link
+        file_info = service.files().get(fileId=existing_file_id, fields="webViewLink").execute()
+        return file_info.get("webViewLink")
 
     else:
         # If file does not exist, upload a new one
@@ -142,6 +150,12 @@ def upload_to_google_drive(file_path, file_name, folder_id):
 
         new_file = service.files().create(
             body=file_metadata, media_body=media, fields="id, webViewLink"
+        ).execute()
+
+        # Ensure the new file has public sharing permissions
+        service.permissions().create(
+            fileId=new_file["id"],
+            body={"type": "anyone", "role": "reader"}
         ).execute()
 
         return new_file.get("webViewLink") # Return the file sharing link
