@@ -131,7 +131,7 @@ with col2:
             username=st.session_state.username,
             transcripts_directory=config.TRANSCRIPTS_DIRECTORY,
             times_directory=config.TIMES_DIRECTORY,
-            folder_id="1F1T7bvLWK7kQlediUJnhGCzXASPMMogp",
+            folder_id="123xBZ2YDy8BZrbErQb0U9TpGY-j3NdK7",
             student_number=query_params["student_number"],
             company_name=query_params["company"] )
         
@@ -229,7 +229,7 @@ if not st.session_state.messages:
     #         username=st.session_state.username,
     #         transcripts_directory=config.TRANSCRIPTS_DIRECTORY,
     #         times_directory=config.TIMES_DIRECTORY,
-    #         folder_id="1F1T7bvLWK7kQlediUJnhGCzXASPMMogp",
+    #         folder_id="123xBZ2YDy8BZrbErQb0U9TpGY-j3NdK7",
     #         student_number=query_params["student_number"],
     #         company_name=query_params["company"] )
 
@@ -315,7 +315,7 @@ if st.session_state.interview_active:
                 #     username=st.session_state.username,
                 #     transcripts_directory=config.TRANSCRIPTS_DIRECTORY,
                 #     times_directory=config.TIMES_DIRECTORY,
-                #     folder_id="1F1T7bvLWK7kQlediUJnhGCzXASPMMogp",
+                #     folder_id="123xBZ2YDy8BZrbErQb0U9TpGY-j3NdK7",
                 #     student_number=query_params["student_number"],
                 #     company_name=query_params["company"] )
 
