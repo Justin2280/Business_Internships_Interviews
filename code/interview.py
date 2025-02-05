@@ -133,7 +133,7 @@ with col2:
             times_directory=config.TIMES_DIRECTORY,
             folder_id="123xBZ2YDy8BZrbErQb0U9TpGY-j3NdK7",
             student_number=query_params["student_number"],
-            company_name=query_params["company"] )
+            company_name=query_params["company"])
         
         # Send email transscript
         send_transcript_email(query_params["student_number"], transcript_link)

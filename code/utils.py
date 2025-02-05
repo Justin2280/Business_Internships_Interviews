@@ -123,25 +123,28 @@ def upload_to_google_drive(file_path, file_name, folder_id):
     response = service.files().list(q=query, fields="files(id, webViewLink)").execute()
     files = response.get("files", [])
 
-    # Step 2: If file exists, delete it before re-uploading
     if files:
-        existing_file_id = files[0]["id"]
-        service.files().delete(fileId=existing_file_id).execute()  # Delete the existing file
+            # If file exists, update it instead of deleting & re-uploading
+            existing_file_id = files[0]["id"]
+            media = MediaFileUpload(file_path, mimetype="text/plain", resumable=True)
 
-    # Step 3: Upload the new file
-    file_metadata = {
-        "name": file_name,
-        "parents": [folder_id]  # Folder ID where the file will be uploaded
-    }
-    media = MediaFileUpload(file_path, mimetype="text/plain")
+            updated_file = service.files().update(
+                fileId=existing_file_id,
+                media_body=media
+            ).execute()
 
-    file = service.files().create(
-        body=file_metadata,
-        media_body=media,
-        fields="id, webViewLink"
-    ).execute()
+            return updated_file.get("webViewLink")
 
-    return file.get("webViewLink")  # Return the file sharing link
+    else:
+        # If file does not exist, upload a new one
+        file_metadata = {"name": file_name, "parents": [folder_id]}
+        media = MediaFileUpload(file_path, mimetype="text/plain")
+
+        new_file = service.files().create(
+            body=file_metadata, media_body=media, fields="id, webViewLink"
+        ).execute()
+
+        return new_file.get("webViewLink") # Return the file sharing link
 
 def send_transcript_email(student_number, transcript_link):
     """
