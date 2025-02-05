@@ -143,20 +143,20 @@ if not st.session_state.interview_active:
     # Clear the screen
     st.empty()
     
-    # Center the button on the page
-    st.markdown(f"""
-    ### Your interview transcript has been saved and shared:
-    [Click here to access the transcript]({transcript_link})
-    """)
+    # # Center the button on the page
+    # st.markdown(f"""
+    # ### Your interview transcript has been saved and shared:
+    # [Click here to access the transcript]({transcript_link})
+    # """)
     
-    # st.markdown(
-    #     f"""
-    #     <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
-    #         <a href="{evaluation_url_with_session}" target="_blank" style="text-decoration: none; background-color: #4CAF50; color: white; padding: 15px 32px; text-align: center; font-size: 16px; border-radius: 8px;">Click here to evaluate the interview</a>
-    #     </div>
-    #     """,
-    #     unsafe_allow_html=True,
-    # )        
+    st.markdown(
+        f"""
+        <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+            <a href="{evaluation_url_with_session}" target="_blank" style="text-decoration: none; background-color: #4CAF50; color: white; padding: 15px 32px; text-align: center; font-size: 16px; border-radius: 8px;">Click here to evaluate the interview</a>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )        
 
 
 # Upon rerun, display the previous conversation (except system prompt or first message)
