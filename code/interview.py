@@ -143,11 +143,11 @@ if not st.session_state.interview_active:
     # Clear the screen
     st.empty()
     
-    # # Center the button on the page
-    # st.markdown(f"""
-    # ### Your interview transcript has been saved and shared:
-    # [Click here to access the transcript]({transcript_link})
-    # """)
+    # Center the button on the page
+    st.markdown(f"""
+    ### Your interview transcript has been saved and shared:
+    [Click here to access the transcript]({transcript_link})
+    """)
     
     st.markdown(
         f"""

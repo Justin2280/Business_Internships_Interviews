@@ -136,10 +136,10 @@ def send_transcript_email(student_number, transcript_link):
     """
     Sends the interview transcript to the student using Strato's SMTP.
     """
-    smtp_server = "smtp.strato.com"  # Replace with your Strato SMTP server
+    smtp_server = "smtp.gmail.com"  # Replace with your SMTP server
     smtp_port = 587  # Port for TLS
-    sender_email = "BusinessInternships@j-en-t.nl"  # Your email
-    sender_password = st.secrets["STRATO_EMAIL_PASSWORD"]  # Store password securely
+    sender_email = "businessinternship.liacs@gmail.com"  # Your email
+    sender_password = st.secrets["EMAIL_PASSWORD"]  # Store password securely
     student_email = f"{student_number}@vuw.leidenuniv.nl"
 
     # Create email message
