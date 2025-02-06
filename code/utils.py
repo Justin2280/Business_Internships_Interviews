@@ -162,7 +162,7 @@ def upload_to_google_drive(file_path, file_name, folder_id):
 
 def send_transcript_email(student_number, recipient_email, transcript_link):
     """
-    Sends the interview transcript to the student using Strato's SMTP.
+    Sends the interview transcript to the student and additional recipient.
     """
     smtp_server = "smtp.gmail.com"  # Replace with your SMTP server
     smtp_port = 587  # Port for TLS
@@ -173,7 +173,8 @@ def send_transcript_email(student_number, recipient_email, transcript_link):
     # Create email message
     msg = MIMEMultipart()
     msg["From"] = sender_email
-    msg["To"] = f"{student_email}, {recipient_email}"
+    msg["To"] = student_email  # Primary recipient
+    msg["Cc"] = recipient_email  # Additional recipient
     msg["Subject"] = "Your Interview Transcript from Leiden University"
 
     body = f"""
@@ -191,12 +192,16 @@ def send_transcript_email(student_number, recipient_email, transcript_link):
     msg.attach(MIMEText(body, "plain"))
 
     try:
-        # Connect to Strato's SMTP server
+        # Connect to SMTP server
         server = smtplib.SMTP(smtp_server, smtp_port)
         server.starttls()  # Secure connection
         server.login(sender_email, sender_password)
-        server.sendmail(sender_email, student_email, msg.as_string())
+
+        # Send email to both recipients
+        recipients = [student_email, recipient_email]
+        server.sendmail(sender_email, recipients, msg.as_string())
+
         server.quit()
-        print(f"Email sent to {student_email}")
+        print(f"Email sent to {recipients}")
     except Exception as e:
         print(f"Error sending email: {e}")
