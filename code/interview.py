@@ -353,6 +353,8 @@ if st.session_state.interview_active:
                     st.session_state.messages.append(
                         {"role": "assistant", "content": closing_message}
                     )
+                    st.rerun()
+
 
                     # Store final transcript and time
                     final_transcript_stored = False
@@ -371,5 +373,4 @@ if st.session_state.interview_active:
                             config.TRANSCRIPTS_DIRECTORY, st.session_state.username
                         )
                     time.sleep(0.1)
-                    st.rerun()
-
+                    
