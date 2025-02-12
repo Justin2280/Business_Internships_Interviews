@@ -358,8 +358,7 @@ if st.session_state.interview_active:
                     final_transcript_stored = False
                     transcript_link = None  # Initialize the variable
 
-                    while not final_transcript_stored:
-                        transcript_link = save_interview_data(
+                    transcript_link = save_interview_data(
                             username=st.session_state.username,
                             transcripts_directory=config.TRANSCRIPTS_DIRECTORY,
                             times_directory=config.TIMES_DIRECTORY,
@@ -368,7 +367,7 @@ if st.session_state.interview_active:
                             company_name=query_params["company"]
                         )
 
-                        final_transcript_stored = check_if_interview_completed(
+                    final_transcript_stored = check_if_interview_completed(
                             config.TRANSCRIPTS_DIRECTORY, st.session_state.username
                         )
-                        time.sleep(0.1)
+                    time.sleep(0.1)
