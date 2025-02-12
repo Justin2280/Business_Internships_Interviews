@@ -311,7 +311,7 @@ if st.session_state.interview_active:
                 # # stopping in case of a write error
                 try:
 
-                    save_interview_data(
+                    transcript_link = save_interview_data(
                     username=st.session_state.username,
                     transcripts_directory=config.TRANSCRIPTS_DIRECTORY,
                     times_directory=config.TIMES_DIRECTORY,
