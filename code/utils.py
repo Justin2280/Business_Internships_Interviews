@@ -86,7 +86,7 @@ def save_interview_data(username, transcripts_directory, times_directory, folder
     # Save transcript
     with open(transcript_file, "w") as t:
         t.write(f"Session ID: {st.session_state.session_id}\n\n")
-        for message in st.session_state.messages:
+        for message in st.session_state.messages[1:]:
             t.write(f"{message['role']}: {message['content']}\n")
 
     # Save interview timing data
