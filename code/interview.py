@@ -29,6 +29,10 @@ st.set_page_config(page_title="Interview", page_icon=config.AVATAR_INTERVIEWER)
 
 # Function to validate query parameters
 def validate_query_params(params, required_keys):
+    # TODO: if doesn't exist, add on a default item. 
+    # in config, let's session type. if production, then these keys are not needed. 
+    # #If in test, let's check if the email address makes sense. 
+    #  TODO: option, disable email sending. 
     missing_keys = [key for key in required_keys if key not in params or not params[key]]
     if missing_keys:
         return False, missing_keys

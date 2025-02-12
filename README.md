@@ -1,4 +1,13 @@
+@TODO: Update the readme with new instructions. Keep the old intro and the refrences to the old repo as separate section
+
 # Code for "Conversations at Scale: Robust AI-led Interviews with a Simple Open-Source Platform"
+
+What it does. 
+
+How it works, what is needed, and how one can adjust it.
+> notes on env as well
+
+# Instructions from the old repo
 
 There are two options to explore the AI-led interviews discussed in the paper.
 
