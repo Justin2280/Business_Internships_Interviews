@@ -353,6 +353,9 @@ if st.session_state.interview_active:
                     st.session_state.messages.append(
                         {"role": "assistant", "content": closing_message}
                     )
+                    
+                    # Delay for 5 seconds before rerunning
+                    time.sleep(5)
                     st.rerun()
 
 
