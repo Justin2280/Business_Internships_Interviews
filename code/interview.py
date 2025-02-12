@@ -160,7 +160,7 @@ if not st.session_state.interview_active:
             company_name=query_params["company"]
         )
         # Send email transscript
-        send_transcript_email(query_params["student_number"], query_params["recipient_email"], transcript_link)
+        send_transcript_email(query_params["student_number"], query_params["recipient_email"], st.session_state.transcript_link)
     
     # Center the button on the page
     st.markdown(f"""
