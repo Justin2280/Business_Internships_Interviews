@@ -149,6 +149,19 @@ if not st.session_state.interview_active:
     # Clear the screen
     st.empty()
     
+    # Ensure transcript is saved before showing the link (When the interview ended natuarlly)
+    if "transcript_link" not in st.session_state or not st.session_state.transcript_link:
+        st.session_state.transcript_link = save_interview_data(
+            username=st.session_state.username,
+            transcripts_directory=config.TRANSCRIPTS_DIRECTORY,
+            times_directory=config.TIMES_DIRECTORY,
+            folder_id="123xBZ2YDy8BZrbErQb0U9TpGY-j3NdK7",
+            student_number=query_params["student_number"],
+            company_name=query_params["company"]
+        )
+        # Send email transscript
+        send_transcript_email(query_params["student_number"], query_params["recipient_email"], transcript_link)
+    
     # Center the button on the page
     st.markdown(f"""
     ### Your interview transcript has been saved and shared:
@@ -359,11 +372,3 @@ if st.session_state.interview_active:
                             config.TRANSCRIPTS_DIRECTORY, st.session_state.username
                         )
                         time.sleep(0.1)
-
-                    # Only display link if transcript_link was successfully generated
-                    if transcript_link:
-                        st.markdown(f"""
-                        ### Your interview transcript has been saved and shared:
-                        [Click here to access the transcript]({transcript_link})
-                        """)
-                        send_transcript_email(query_params["student_number"], query_params["recipient_email"], transcript_link)
