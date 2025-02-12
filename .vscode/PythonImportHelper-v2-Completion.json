@@ -373,7 +373,7 @@
         "kind": 5,
         "importPath": "code.interview",
         "description": "code.interview",
-        "peekOfCode": "api_kwargs[\"messages\"] = st.session_state.messages\napi_kwargs[\"model\"] = config.MODEL\napi_kwargs[\"max_tokens\"] = config.MAX_OUTPUT_TOKENS\nif config.TEMPERATURE is not None:\n    api_kwargs[\"temperature\"] = config.TEMPERATURE\n# In case the interview history is still empty, pass system prompt to model, and\n# generate and display its first message\nif not st.session_state.messages:\n    # Replace greeting in the interview outline with a personalized message\n    personalized_prompt = config.INTERVIEW_OUTLINE.replace(",
+        "peekOfCode": "api_kwargs[\"messages\"] = st.session_state.messages\napi_kwargs[\"model\"] = config.MODEL\napi_kwargs[\"max_tokens\"] = config.MAX_OUTPUT_TOKENS\nif config.TEMPERATURE is not None:\n    api_kwargs[\"temperature\"] = config.TEMPERATURE\n# In case the interview history is still empty, pass system prompt to model, and\n# generate and display its first message\nif not st.session_state.messages:\n    if api == \"openai\":\n        st.session_state.messages.append(",
         "detail": "code.interview",
         "documentation": {}
     },
@@ -382,7 +382,7 @@
         "kind": 5,
         "importPath": "code.interview",
         "description": "code.interview",
-        "peekOfCode": "api_kwargs[\"model\"] = config.MODEL\napi_kwargs[\"max_tokens\"] = config.MAX_OUTPUT_TOKENS\nif config.TEMPERATURE is not None:\n    api_kwargs[\"temperature\"] = config.TEMPERATURE\n# In case the interview history is still empty, pass system prompt to model, and\n# generate and display its first message\nif not st.session_state.messages:\n    # Replace greeting in the interview outline with a personalized message\n    personalized_prompt = config.INTERVIEW_OUTLINE.replace(\n        \"Hello! I'm glad to have the opportunity to speak about your educational journey today.\",",
+        "peekOfCode": "api_kwargs[\"model\"] = config.MODEL\napi_kwargs[\"max_tokens\"] = config.MAX_OUTPUT_TOKENS\nif config.TEMPERATURE is not None:\n    api_kwargs[\"temperature\"] = config.TEMPERATURE\n# In case the interview history is still empty, pass system prompt to model, and\n# generate and display its first message\nif not st.session_state.messages:\n    if api == \"openai\":\n        st.session_state.messages.append(\n            {\"role\": \"system\", \"content\": personalized_prompt}",
         "detail": "code.interview",
         "documentation": {}
     },
@@ -391,7 +391,7 @@
         "kind": 5,
         "importPath": "code.interview",
         "description": "code.interview",
-        "peekOfCode": "api_kwargs[\"max_tokens\"] = config.MAX_OUTPUT_TOKENS\nif config.TEMPERATURE is not None:\n    api_kwargs[\"temperature\"] = config.TEMPERATURE\n# In case the interview history is still empty, pass system prompt to model, and\n# generate and display its first message\nif not st.session_state.messages:\n    # Replace greeting in the interview outline with a personalized message\n    personalized_prompt = config.INTERVIEW_OUTLINE.replace(\n        \"Hello! I'm glad to have the opportunity to speak about your educational journey today.\",\n        f\"Hello {respondent_name}! I'm glad to have the opportunity to speak about your educational journey today.\"",
+        "peekOfCode": "api_kwargs[\"max_tokens\"] = config.MAX_OUTPUT_TOKENS\nif config.TEMPERATURE is not None:\n    api_kwargs[\"temperature\"] = config.TEMPERATURE\n# In case the interview history is still empty, pass system prompt to model, and\n# generate and display its first message\nif not st.session_state.messages:\n    if api == \"openai\":\n        st.session_state.messages.append(\n            {\"role\": \"system\", \"content\": personalized_prompt}\n        )",
         "detail": "code.interview",
         "documentation": {}
     },
