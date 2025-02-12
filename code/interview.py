@@ -199,7 +199,7 @@ if not st.session_state.messages:
     if api == "openai":
 
         st.session_state.messages.append(
-            {"role": "system", "content": personalized_prompt}
+            {"role": "system", "content": config.INTERVIEW_OUTLINE}
         )
         with st.chat_message("assistant", avatar=config.AVATAR_INTERVIEWER):
             stream = client.chat.completions.create(**api_kwargs)
