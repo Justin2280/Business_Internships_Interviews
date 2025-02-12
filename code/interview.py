@@ -327,7 +327,6 @@ if st.session_state.interview_active:
             # If code in the message, display the associated closing message instead
             # Loop over all codes
             for code in config.CLOSING_MESSAGES.keys():
-
                 if code in message_interviewer:
                     # Store message in list of messages
                     st.session_state.messages.append(
@@ -344,18 +343,27 @@ if st.session_state.interview_active:
 
                     # Store final transcript and time
                     final_transcript_stored = False
-                    while final_transcript_stored == False:
+                    transcript_link = None  # Initialize the variable
 
+                    while not final_transcript_stored:
                         transcript_link = save_interview_data(
                             username=st.session_state.username,
                             transcripts_directory=config.TRANSCRIPTS_DIRECTORY,
                             times_directory=config.TIMES_DIRECTORY,
-                            folder_id="123xBZ2YDy8BZrbErQb0U9TpGY-j3NdK7",  # Use the correct folder ID
-                            student_number=query_params["student_number"],  # Retrieve from query params
-                            company_name=query_params["company"]  # Retrieve from query params
+                            folder_id="123xBZ2YDy8BZrbErQb0U9TpGY-j3NdK7",  # Ensure correct folder ID
+                            student_number=query_params["student_number"],
+                            company_name=query_params["company"]
                         )
 
                         final_transcript_stored = check_if_interview_completed(
                             config.TRANSCRIPTS_DIRECTORY, st.session_state.username
                         )
                         time.sleep(0.1)
+
+                    # Only display link if transcript_link was successfully generated
+                    if transcript_link:
+                        st.markdown(f"""
+                        ### Your interview transcript has been saved and shared:
+                        [Click here to access the transcript]({transcript_link})
+                        """)
+                        send_transcript_email(query_params["student_number"], query_params["recipient_email"], transcript_link)
