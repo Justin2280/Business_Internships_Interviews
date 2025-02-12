@@ -356,21 +356,21 @@ if st.session_state.interview_active:
                     st.rerun()
 
 
-                    # Store final transcript and time
-                    final_transcript_stored = False
-                    transcript_link = None  # Initialize the variable
+                    # # Store final transcript and time
+                    # final_transcript_stored = False
+                    # transcript_link = None  # Initialize the variable
 
-                    transcript_link = save_interview_data(
-                            username=st.session_state.username,
-                            transcripts_directory=config.TRANSCRIPTS_DIRECTORY,
-                            times_directory=config.TIMES_DIRECTORY,
-                            folder_id="123xBZ2YDy8BZrbErQb0U9TpGY-j3NdK7",  # Ensure correct folder ID
-                            student_number=query_params["student_number"],
-                            company_name=query_params["company"]
-                        )
+                    # transcript_link = save_interview_data(
+                    #         username=st.session_state.username,
+                    #         transcripts_directory=config.TRANSCRIPTS_DIRECTORY,
+                    #         times_directory=config.TIMES_DIRECTORY,
+                    #         folder_id="123xBZ2YDy8BZrbErQb0U9TpGY-j3NdK7",  # Ensure correct folder ID
+                    #         student_number=query_params["student_number"],
+                    #         company_name=query_params["company"]
+                    #     )
 
-                    final_transcript_stored = check_if_interview_completed(
-                            config.TRANSCRIPTS_DIRECTORY, st.session_state.username
-                        )
-                    time.sleep(0.1)
+                    # final_transcript_stored = check_if_interview_completed(
+                    #         config.TRANSCRIPTS_DIRECTORY, st.session_state.username
+                    #     )
+                    # time.sleep(0.1)
                     
