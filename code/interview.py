@@ -346,7 +346,7 @@ if st.session_state.interview_active:
                     final_transcript_stored = False
                     while final_transcript_stored == False:
 
-                        save_interview_data(
+                        transcript_link = save_interview_data(
                             username=st.session_state.username,
                             transcripts_directory=config.TRANSCRIPTS_DIRECTORY,
                             times_directory=config.TIMES_DIRECTORY,
