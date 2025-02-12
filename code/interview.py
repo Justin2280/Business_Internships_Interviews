@@ -371,3 +371,5 @@ if st.session_state.interview_active:
                             config.TRANSCRIPTS_DIRECTORY, st.session_state.username
                         )
                     time.sleep(0.1)
+                    st.rerun()
+
