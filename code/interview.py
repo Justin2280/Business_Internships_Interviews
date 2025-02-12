@@ -165,7 +165,7 @@ if not st.session_state.interview_active:
     # Center the button on the page
     st.markdown(f"""
     ### Your interview transcript has been saved and shared:
-    [Click here to access the transcript]({transcript_link})
+    [Click here to access the transcript]({st.session_state.transcript_link})
     """)
     
     st.markdown(
