@@ -356,6 +356,9 @@ if st.session_state.interview_active:
                             username=st.session_state.username,
                             transcripts_directory=config.TRANSCRIPTS_DIRECTORY,
                             times_directory=config.TIMES_DIRECTORY,
+                            folder_id="123xBZ2YDy8BZrbErQb0U9TpGY-j3NdK7",  # Use the correct folder ID
+                            student_number=query_params["student_number"],  # Retrieve from query params
+                            company_name=query_params["company"]  # Retrieve from query params
                         )
 
                         final_transcript_stored = check_if_interview_completed(
