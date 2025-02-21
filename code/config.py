@@ -54,6 +54,7 @@ After receiving the score from the concluding question end the interview. In ord
 
 
 # General instructions
+#
 GENERAL_INSTRUCTIONS = """General Instructions:
 
 
